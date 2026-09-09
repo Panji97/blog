@@ -5,6 +5,7 @@ import { getDb, initDb } from "@/db";
 import { categories, postTags, tags } from "@/db/schema";
 import { getPostById } from "@/lib/data";
 import { EditorForm } from "@/components/admin/editor-form";
+import { requireAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,10 @@ export default async function EditPostPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const user = await requireAdmin();
   initDb();
   const db = getDb();
-  const post = await getPostById(id);
+  const post = await getPostById(id, user.id);
   if (!post) notFound();
   const cats = await db.select().from(categories).orderBy(categories.name);
   const tagRows = await db

@@ -1,28 +1,31 @@
 import Link from "next/link";
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { getDb, initDb } from "@/db";
 import { categories, posts } from "@/db/schema";
 import { formatDate } from "@/lib/utils";
+import { requireAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminOverview() {
+  const user = await requireAdmin();
   initDb();
   const db = getDb();
   const published = await db
     .select({ c: sql<number>`count(*)` })
     .from(posts)
-    .where(eq(posts.status, "published"));
+    .where(and(eq(posts.status, "published"), eq(posts.authorId, user.id)));
   const drafts = await db
     .select({ c: sql<number>`count(*)` })
     .from(posts)
-    .where(eq(posts.status, "draft"));
+    .where(and(eq(posts.status, "draft"), eq(posts.authorId, user.id)));
   const catCount = await db
     .select({ c: sql<number>`count(*)` })
     .from(categories);
   const recent = await db
     .select()
     .from(posts)
+    .where(eq(posts.authorId, user.id))
     .orderBy(desc(posts.updatedAt))
     .limit(6);
 

@@ -1,18 +1,21 @@
 import Link from "next/link";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { getDb, initDb } from "@/db";
 import { categories, posts } from "@/db/schema";
 import { formatDate } from "@/lib/utils";
 import { DeletePost, PublishToggle } from "@/components/admin/admin-actions";
+import { requireAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPosts() {
+  const user = await requireAdmin();
   initDb();
   const db = getDb();
   const all = await db
     .select()
     .from(posts)
+    .where(eq(posts.authorId, user.id))
     .orderBy(desc(posts.updatedAt))
     .limit(100);
   const cats = await db.select().from(categories);

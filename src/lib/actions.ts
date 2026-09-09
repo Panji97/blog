@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDb, initDb } from "@/db";
 import { categories, postTags, posts, tags, users } from "@/db/schema";
 import {
@@ -202,7 +202,7 @@ export async function createPostAction(formData: FormData) {
 }
 
 export async function updatePostAction(id: string, formData: FormData) {
-  await ensureAuth();
+  const user = await ensureAuth();
   const raw = {
     title: String(formData.get("title") ?? ""),
     slug: String(formData.get("slug") ?? ""),
@@ -228,7 +228,7 @@ export async function updatePostAction(id: string, formData: FormData) {
   const current = await db
     .select()
     .from(posts)
-    .where(eq(posts.id, id))
+    .where(and(eq(posts.id, id), eq(posts.authorId, user.id)))
     .limit(1);
   if (!current.length) return { error: "Post not found." };
   const clash = await db
@@ -264,10 +264,14 @@ export async function updatePostAction(id: string, formData: FormData) {
 }
 
 export async function togglePublishAction(id: string) {
-  await ensureAuth();
+  const user = await ensureAuth();
   initDb();
   const db = getDb();
-  const cur = await db.select().from(posts).where(eq(posts.id, id)).limit(1);
+  const cur = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.id, id), eq(posts.authorId, user.id)))
+    .limit(1);
   if (!cur.length) return { error: "Not found" };
   const next = cur[0].status === "published" ? "draft" : "published";
   const now = new Date().toISOString();
@@ -286,11 +290,17 @@ export async function togglePublishAction(id: string) {
 }
 
 export async function deletePostAction(id: string) {
-  await ensureAuth();
+  const user = await ensureAuth();
   initDb();
   const db = getDb();
-  const cur = await db.select().from(posts).where(eq(posts.id, id)).limit(1);
-  await db.delete(posts).where(eq(posts.id, id));
+  const cur = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.id, id), eq(posts.authorId, user.id)))
+    .limit(1);
+  await db
+    .delete(posts)
+    .where(and(eq(posts.id, id), eq(posts.authorId, user.id)));
   revalidatePath("/");
   revalidatePath("/blog");
   if (cur[0]) revalidatePath(`/blog/${cur[0].slug}`);
