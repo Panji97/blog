@@ -1,14 +1,15 @@
 "use client";
+
 import Link from "next/link";
 import { useActionState } from "react";
-import { loginAction } from "@/lib/actions";
+import { registerAction } from "@/lib/actions";
 import { Input, Label } from "@/components/ui/fields";
 import { Button } from "@/components/ui/button";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(
     async (_prev: { error?: string } | null, formData: FormData) => {
-      const res = await loginAction(formData);
+      const res = await registerAction(formData);
       return res ?? null;
     },
     null,
@@ -17,17 +18,26 @@ export default function LoginPage() {
   return (
     <div className="mx-auto max-w-[420px] px-5 py-16 md:py-24">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-        Admin
+        Daftar
       </p>
-      <h1 className="mt-3 font-serif text-4xl tracking-tight">Masuk</h1>
+      <h1 className="mt-3 font-serif text-4xl tracking-tight">Buat akun</h1>
       <p className="mt-3 text-[15px] text-muted">
-        Akun contoh:{" "}
-        <code className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[13px]">
-          admin@example.com / admin123
-        </code>
+        Isi data diri Anda untuk masuk ke dasbor admin.
       </p>
+
       <form action={formAction} className="mt-8 space-y-5">
-        <input type="hidden" name="next" value="/admin" />
+        <div className="space-y-1.5">
+          <Label htmlFor="fullName">Nama lengkap</Label>
+          <Input
+            id="fullName"
+            name="fullName"
+            type="text"
+            required
+            autoComplete="name"
+            placeholder="Nama lengkap"
+          />
+        </div>
+
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -36,9 +46,10 @@ export default function LoginPage() {
             type="email"
             required
             autoComplete="email"
-            placeholder="admin@example.com"
+            placeholder="nama@email.com"
           />
         </div>
+
         <div className="space-y-1.5">
           <Label htmlFor="password">Kata sandi</Label>
           <Input
@@ -46,10 +57,11 @@ export default function LoginPage() {
             name="password"
             type="password"
             required
-            autoComplete="current-password"
-            placeholder="••••••••"
+            autoComplete="new-password"
+            placeholder="Minimal 6 karakter"
           />
         </div>
+
         {state?.error && (
           <p
             role="alert"
@@ -58,18 +70,19 @@ export default function LoginPage() {
             {state.error}
           </p>
         )}
+
         <Button type="submit" disabled={pending} className="w-full" size="lg">
-          {pending ? "Memproses..." : "Masuk"}
+          {pending ? "Mendaftar..." : "Daftar"}
         </Button>
       </form>
 
       <p className="mt-5 text-center text-sm text-muted">
-        Belum punya akun?{" "}
+        Sudah punya akun?{" "}
         <Link
-          href="/register"
+          href="/login"
           className="font-medium text-foreground underline-offset-4 hover:underline"
         >
-          Daftar sekarang
+          Masuk
         </Link>
       </p>
     </div>

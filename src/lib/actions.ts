@@ -9,6 +9,7 @@ import {
   createSession,
   destroySession,
   getSessionUser,
+  hashPassword,
   verifyPassword,
 } from "@/lib/auth";
 import { slugifyTitle, uid } from "@/lib/utils";
@@ -83,6 +84,59 @@ export async function loginAction(formData: FormData) {
   if (!ok) return { error: "Invalid email or password." };
   await createSession(found[0].id);
   redirect(next.startsWith("/") ? next : "/admin");
+}
+
+export async function registerAction(formData: FormData) {
+  initDb();
+  const fullName = String(formData.get("fullName") ?? "").trim();
+  const email = String(formData.get("email") ?? "")
+    .toLowerCase()
+    .trim();
+  const password = String(formData.get("password") ?? "");
+
+  const parsed = z
+    .object({
+      fullName: z.string().min(2).max(60),
+      email: z.string().email(),
+      password: z.string().min(6).max(128),
+    })
+    .safeParse({ fullName, email, password });
+
+  if (!parsed.success) {
+    return {
+      error:
+        "Nama harus diisi minimal 2 karakter, email valid, dan password minimal 6 karakter.",
+    };
+  }
+
+  const db = getDb();
+  const exists = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, parsed.data.email))
+    .limit(1);
+
+  if (exists.length) {
+    return {
+      error: "Email sudah terdaftar. Silakan masuk atau gunakan email lain.",
+    };
+  }
+
+  const id = uid("u_");
+  const now = new Date().toISOString();
+
+  await db.insert(users).values({
+    id,
+    name: parsed.data.fullName,
+    email: parsed.data.email,
+    passwordHash: await hashPassword(parsed.data.password),
+    role: "admin",
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  await createSession(id);
+  redirect("/admin");
 }
 
 export async function logoutAction() {
