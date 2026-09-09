@@ -62,8 +62,8 @@ export default async function AdminOverview() {
           Artikel baru
         </Link>
       </div>
-      <div className="mt-4 overflow-x-auto rounded-md border border-border">
-        <table className="w-full min-w-[640px] text-left text-sm">
+      <div className="mt-4 hidden overflow-x-auto rounded-md border border-border md:block">
+        <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-border text-[13px] uppercase tracking-wide text-muted">
               <th className="px-4 py-3 font-medium">Judul</th>
@@ -108,6 +108,34 @@ export default async function AdminOverview() {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="mt-4 space-y-3 md:hidden">
+        {recent.map((p) => (
+          <article key={p.id} className="rounded-md border border-border p-4">
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="min-w-0 break-words font-medium">{p.title}</h3>
+              <span
+                className={`shrink-0 rounded-full border px-2 py-0.5 text-xs ${p.status === "published" ? "border-accent/50 text-accent" : "border-border text-muted"}`}
+              >
+                {p.status === "published" ? "Diterbitkan" : "Draf"}
+              </span>
+            </div>
+            <div className="mt-3 flex items-center justify-between gap-3 text-[13px] text-muted">
+              <span>Diperbarui {formatDate(p.updatedAt)}</span>
+              <Link
+                href={`/admin/posts/${p.id}/edit`}
+                className="shrink-0 font-medium text-foreground underline underline-offset-4"
+              >
+                Edit
+              </Link>
+            </div>
+          </article>
+        ))}
+        {recent.length === 0 && (
+          <p className="rounded-md border border-border px-4 py-8 text-center text-muted">
+            Belum ada artikel. Buat draf pertama Anda.
+          </p>
+        )}
       </div>
     </div>
   );

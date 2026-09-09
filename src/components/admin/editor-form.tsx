@@ -235,6 +235,7 @@ export function EditorForm({
               aria-label="Konten artikel (Markdown)"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              wrap="soft"
               rows={24}
               placeholder={
                 "Tulis dalam Markdown...\n\n## Judul bagian\n\nBeberapa paragraf dengan **penekanan**.\n\n```ts\nconst x = 1;\n```\n\n> Kutipan."
