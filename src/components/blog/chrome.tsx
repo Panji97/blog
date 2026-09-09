@@ -10,14 +10,14 @@ export async function SiteHeader() {
       <a href="#content" className="skip-link">
         Lewati ke konten
       </a>
-      <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-5 md:px-8">
-        <div className="flex items-center gap-8">
+      <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-2 px-4 py-2 md:flex-nowrap md:px-8 md:py-0">
+        <div className="flex items-center gap-3 sm:gap-8">
           <Link
             href="/"
             className="flex items-baseline gap-2"
             aria-label="Beranda"
           >
-            <span className="font-serif text-[22px] leading-none tracking-tight">
+            <span className="font-serif text-[20px] leading-none tracking-tight sm:text-[22px]">
               Marginalia
             </span>
             <span className="hidden text-[11px] uppercase tracking-[0.18em] text-muted sm:inline">

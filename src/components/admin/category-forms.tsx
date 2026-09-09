@@ -43,9 +43,9 @@ export function CategoryForm({
           }
         });
       }}
-      className="flex flex-wrap items-end gap-3 rounded-md border border-border p-4"
+      className="grid gap-3 rounded-md border border-border p-3 sm:grid-cols-2 sm:p-4 lg:grid-cols-[1fr_1fr_2fr_auto]"
     >
-      <div className="min-w-[160px] flex-1 space-y-1">
+      <div className="space-y-1">
         <Label htmlFor={id ? `name-${id}` : "new-name"}>Nama</Label>
         <Input
           id={id ? `name-${id}` : "new-name"}
@@ -55,7 +55,7 @@ export function CategoryForm({
           placeholder="Teknologi"
         />
       </div>
-      <div className="min-w-[160px] flex-1 space-y-1">
+      <div className="space-y-1">
         <Label htmlFor={id ? `slug-${id}` : "new-slug"}>Slug</Label>
         <Input
           id={id ? `slug-${id}` : "new-slug"}
@@ -64,7 +64,7 @@ export function CategoryForm({
           placeholder="teknologi"
         />
       </div>
-      <div className="min-w-[200px] flex-[2] space-y-1">
+      <div className="space-y-1 sm:col-span-2 lg:col-span-1">
         <Label htmlFor={id ? `desc-${id}` : "new-desc"}>Deskripsi</Label>
         <Input
           id={id ? `desc-${id}` : "new-desc"}
@@ -73,7 +73,7 @@ export function CategoryForm({
           placeholder="Topik apa yang dibahas"
         />
       </div>
-      <Button type="submit" disabled={pending}>
+      <Button type="submit" disabled={pending} className="w-full sm:w-auto">
         {pending ? "Menyimpan..." : id ? "Simpan" : "Tambah"}
       </Button>
       {error && (

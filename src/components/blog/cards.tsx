@@ -23,17 +23,17 @@ export function FeaturedCard({ post }: { post: PostWithMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group grid gap-8 border-y border-border py-10 md:grid-cols-[1.2fr_1fr] md:py-14"
+      className="group grid gap-6 border-y border-border py-8 sm:gap-8 md:grid-cols-[1.2fr_1fr] md:gap-8 md:py-14"
     >
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
           {post.categoryName ?? "Esai"}
         </p>
-        <h2 className="mt-4 font-serif text-4xl leading-[1.05] tracking-tight text-balance group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4 md:text-6xl">
+        <h2 className="mt-4 font-serif text-[2rem] leading-[1.05] tracking-tight text-balance group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4 sm:text-[2.75rem] md:text-6xl">
           {post.title}
         </h2>
         {post.excerpt && (
-          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-muted">
+          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted sm:text-[17px]">
             {post.excerpt}
           </p>
         )}
@@ -41,8 +41,8 @@ export function FeaturedCard({ post }: { post: PostWithMeta }) {
           <Meta post={post} />
         </div>
       </div>
-      <div className="flex flex-col justify-end border-l border-border pl-0 md:pl-8">
-        <p className="font-serif text-lg italic leading-snug text-muted">
+      <div className="flex flex-col justify-end border-t border-border pt-5 md:border-l md:border-t-0 md:pl-8 md:pt-0">
+        <p className="font-serif text-base italic leading-snug text-muted sm:text-lg">
           “{post.excerpt?.split(".")[0] ?? post.title}.”
         </p>
         <span className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-medium">
@@ -63,16 +63,16 @@ export function StandardCard({ post }: { post: PostWithMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group block border-t border-border py-7"
+      className="group block border-t border-border py-6 sm:py-7"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
         {post.categoryName ?? "Esai"}
       </p>
-      <h3 className="mt-2.5 font-serif text-[26px] leading-tight tracking-tight group-hover:underline group-hover:underline-offset-4 group-hover:decoration-1">
+      <h3 className="mt-2.5 font-serif text-[1.55rem] leading-tight tracking-tight group-hover:underline group-hover:underline-offset-4 group-hover:decoration-1 sm:text-[26px]">
         {post.title}
       </h3>
       {post.excerpt && (
-        <p className="mt-2 line-clamp-2 text-[15px] leading-relaxed text-muted">
+        <p className="mt-2 line-clamp-2 text-[14px] leading-relaxed text-muted sm:text-[15px]">
           {post.excerpt}
         </p>
       )}

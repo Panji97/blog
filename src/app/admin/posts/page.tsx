@@ -20,11 +20,13 @@ export default async function AdminPosts() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h2 className="font-serif text-2xl tracking-tight">Artikel</h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="font-serif text-xl tracking-tight sm:text-2xl">
+          Artikel
+        </h2>
         <Link
           href="/admin/posts/new"
-          className="inline-flex h-9 items-center rounded-md bg-foreground px-4 text-sm font-medium text-background hover:opacity-85"
+          className="inline-flex h-10 items-center rounded-md bg-foreground px-3 text-sm font-medium text-background hover:opacity-85 sm:px-4"
         >
           Artikel baru
         </Link>

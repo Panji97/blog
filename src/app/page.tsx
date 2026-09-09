@@ -30,35 +30,35 @@ export default async function Home() {
   return (
     <div className="mx-auto max-w-[1280px] px-5 md:px-8">
       {/* Editorial hero */}
-      <section className="grid gap-10 pb-4 pt-14 md:grid-cols-[1.3fr_1fr] md:pt-20">
+      <section className="grid gap-8 pb-4 pt-10 sm:pt-14 md:grid-cols-[1.3fr_1fr] md:gap-10 md:pt-20">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             Publikasi tentang membangun &amp; berpikir
           </p>
-          <h1 className="mt-5 font-serif text-[44px] leading-[1.02] tracking-tight text-balance md:text-[76px]">
+          <h1 className="mt-5 font-serif text-[2.1rem] leading-[1.02] tracking-tight text-balance sm:text-[2.8rem] md:text-[76px]">
             Ide, catatan, dan hal yang layak dipikirkan.
           </h1>
-          <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted">
+          <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-muted sm:text-[17px]">
             Kumpulan esai, catatan teknis, dan observasi dari pekerjaan di balik
             layar. Diterbitkan sesekali dan diedit dengan hati-hati.
           </p>
-          <div className="mt-8 flex items-center gap-3 text-sm">
+          <div className="mt-8 flex flex-col gap-3 text-sm sm:flex-row sm:items-center">
             <Link
               href="/blog"
-              className="inline-flex h-10 items-center rounded-md bg-foreground px-5 font-medium text-background hover:opacity-85"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-foreground px-5 font-medium text-background hover:opacity-85"
             >
               Lihat semua artikel
             </Link>
             <Link
               href="/about"
-              className="inline-flex h-10 items-center rounded-md border border-border px-5 font-medium hover:bg-surface"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-border px-5 font-medium hover:bg-surface"
             >
               Tentang
             </Link>
           </div>
         </div>
         <aside
-          className="border-l border-border pl-6 md:pl-8"
+          className="border-t border-border pt-6 md:border-l md:border-t-0 md:pl-8 md:pt-0"
           aria-label="Index"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
@@ -100,7 +100,7 @@ export default async function Home() {
         </div>
         <div
           id="topics"
-          className="h-fit border border-border bg-surface/40 p-6 md:sticky md:top-6 md:bg-transparent md:p-0 md:border-0"
+          className="h-fit border border-border bg-surface/40 p-4 sm:p-6 md:sticky md:top-6 md:bg-transparent md:p-0 md:border-0"
         >
           <h2 className="font-serif text-2xl tracking-tight md:border-b md:border-border md:pb-3">
             Topik
@@ -138,7 +138,7 @@ export default async function Home() {
               Semua artikel →
             </Link>
           </div>
-          <div className="grid gap-x-10 md:grid-cols-2">
+          <div className="grid gap-x-6 gap-y-2 md:grid-cols-2 md:gap-x-10">
             {selected.map((p) => (
               <StandardCard key={p.id} post={p} />
             ))}

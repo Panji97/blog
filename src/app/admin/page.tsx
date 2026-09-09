@@ -38,24 +38,26 @@ export default async function AdminOverview() {
 
   return (
     <div>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
         {stats.map((s) => (
           <Link
             key={s.label}
             href={s.href}
-            className="rounded-md border border-border p-5 hover:bg-surface/50"
+            className="rounded-md border border-border p-4 hover:bg-surface/50 sm:p-5"
           >
-            <p className="font-serif text-4xl">{s.value}</p>
+            <p className="font-serif text-3xl sm:text-4xl">{s.value}</p>
             <p className="mt-1 text-sm text-muted">{s.label}</p>
           </Link>
         ))}
       </div>
 
-      <div className="mt-10 flex items-center justify-between">
-        <h2 className="font-serif text-2xl tracking-tight">Artikel terbaru</h2>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3 sm:mt-10">
+        <h2 className="font-serif text-xl tracking-tight sm:text-2xl">
+          Artikel terbaru
+        </h2>
         <Link
           href="/admin/posts/new"
-          className="inline-flex h-9 items-center rounded-md bg-foreground px-4 text-sm font-medium text-background hover:opacity-85"
+          className="inline-flex h-10 items-center rounded-md bg-foreground px-3 text-sm font-medium text-background hover:opacity-85 sm:px-4"
         >
           Artikel baru
         </Link>

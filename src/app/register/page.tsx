@@ -16,7 +16,7 @@ export default function RegisterPage() {
   );
 
   return (
-    <div className="mx-auto max-w-[420px] px-5 py-16 md:py-24">
+    <div className="mx-auto max-w-[420px] px-4 py-12 sm:px-5 sm:py-16 md:py-24">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
         Daftar
       </p>
