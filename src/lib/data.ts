@@ -1,7 +1,6 @@
 import { and, desc, eq, like, or, sql } from "drizzle-orm";
 import { getDb, initDb } from "@/db";
 import { categories, postTags, posts, tags, users } from "@/db/schema";
-import { getSessionUser } from "@/lib/auth";
 import { readingMinutes } from "./utils";
 
 export type PostWithMeta = {
@@ -67,8 +66,6 @@ async function tagsFor(postId: string) {
 
 export async function getPublishedPosts(limit = 50) {
   initDb();
-  const user = await getSessionUser();
-  if (!user) return [];
   const db = getDb();
   const rows = await db
     .select({
@@ -93,7 +90,7 @@ export async function getPublishedPosts(limit = 50) {
     .from(posts)
     .leftJoin(users, eq(users.id, posts.authorId))
     .leftJoin(categories, eq(categories.id, posts.categoryId))
-    .where(and(eq(posts.status, "published"), eq(posts.authorId, user.id)))
+    .where(eq(posts.status, "published"))
     .orderBy(desc(posts.publishedAt))
     .limit(limit);
   const out: PostWithMeta[] = [];
@@ -103,8 +100,6 @@ export async function getPublishedPosts(limit = 50) {
 
 export async function getPostBySlug(slug: string) {
   initDb();
-  const user = await getSessionUser();
-  if (!user) return null;
   const db = getDb();
   const rows = await db
     .select({
@@ -129,7 +124,7 @@ export async function getPostBySlug(slug: string) {
     .from(posts)
     .leftJoin(users, eq(users.id, posts.authorId))
     .leftJoin(categories, eq(categories.id, posts.categoryId))
-    .where(and(eq(posts.slug, slug), eq(posts.authorId, user.id)))
+    .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
     .limit(1);
   if (!rows.length) return null;
   return toMeta(rows[0] as never, await tagsFor(rows[0].id));
@@ -177,8 +172,6 @@ export async function getPrevNext(slug: string) {
 
 export async function searchPosts(q: string, limit = 20) {
   initDb();
-  const user = await getSessionUser();
-  if (!user) return [];
   if (!q.trim()) return [];
   const db = getDb();
   const likeQ = `%${q.trim()}%`;
@@ -208,7 +201,6 @@ export async function searchPosts(q: string, limit = 20) {
     .where(
       and(
         eq(posts.status, "published"),
-        eq(posts.authorId, user.id),
         or(
           like(posts.title, likeQ),
           like(posts.excerpt, likeQ),
@@ -225,14 +217,12 @@ export async function searchPosts(q: string, limit = 20) {
 
 export async function getCategoriesWithCounts() {
   initDb();
-  const user = await getSessionUser();
-  if (!user) return [];
   const db = getDb();
   const cats = await db.select().from(categories).orderBy(categories.name);
   const counts = await db
     .select({ categoryId: posts.categoryId, count: sql<number>`count(*)` })
     .from(posts)
-    .where(and(eq(posts.status, "published"), eq(posts.authorId, user.id)))
+    .where(eq(posts.status, "published"))
     .groupBy(posts.categoryId);
   const map = new Map(counts.map((c) => [c.categoryId, c.count]));
   return cats.map((c) => ({ ...c, count: map.get(c.id) ?? 0 }));
@@ -240,8 +230,6 @@ export async function getCategoriesWithCounts() {
 
 export async function getPostsByCategory(categorySlug: string) {
   initDb();
-  const user = await getSessionUser();
-  if (!user) return null;
   const db = getDb();
   const cat = await db
     .select()
@@ -272,13 +260,7 @@ export async function getPostsByCategory(categorySlug: string) {
     .from(posts)
     .leftJoin(users, eq(users.id, posts.authorId))
     .leftJoin(categories, eq(categories.id, posts.categoryId))
-    .where(
-      and(
-        eq(posts.status, "published"),
-        eq(posts.authorId, user.id),
-        eq(posts.categoryId, cat[0].id),
-      ),
-    )
+    .where(and(eq(posts.status, "published"), eq(posts.categoryId, cat[0].id)))
     .orderBy(desc(posts.publishedAt));
   const out: PostWithMeta[] = [];
   for (const r of rows) out.push(toMeta(r as never, await tagsFor(r.id)));
