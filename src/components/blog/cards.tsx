@@ -11,7 +11,7 @@ function Meta({
 }) {
   return (
     <p
-      className={`text-[13px] tracking-wide ${light ? "text-foreground/70" : "text-muted"}`}
+      className={`break-words text-[13px] tracking-wide ${light ? "text-foreground/70" : "text-muted"}`}
     >
       {post.authorName ?? "Penulis"} · {formatDate(post.publishedAt)} ·{" "}
       {post.readingTime} menit baca
@@ -72,7 +72,7 @@ export function StandardCard({ post }: { post: PostWithMeta }) {
         {post.title}
       </h3>
       {post.excerpt && (
-        <p className="mt-2 line-clamp-2 text-[14px] leading-relaxed text-muted sm:text-[15px]">
+        <p className="mt-2 text-[14px] leading-relaxed text-muted sm:text-[15px]">
           {post.excerpt}
         </p>
       )}

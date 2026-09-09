@@ -48,7 +48,7 @@ export default async function AdminPosts() {
                 key={p.id}
                 className="border-b border-border/60 last:border-0"
               >
-                <td className="max-w-[280px] truncate px-4 py-3 font-medium">
+                <td className="max-w-[280px] break-words px-4 py-3 font-medium">
                   {p.title}
                 </td>
                 <td className="px-4 py-3">

@@ -40,8 +40,10 @@ export function DeletePost({ id, title }: { id: string; title: string }) {
     );
   }
   return (
-    <span className="inline-flex items-center gap-2 text-[13px]">
-      <span className="text-muted">Hapus “{title.slice(0, 30)}”?</span>
+    <span className="inline-flex max-w-full flex-wrap items-center gap-2 text-[13px]">
+      <span className="min-w-0 break-words text-muted">
+        Hapus “{title.slice(0, 30)}”?
+      </span>
       <button
         disabled={pending}
         onClick={() =>
