@@ -72,8 +72,7 @@ export async function getSessionUser() {
     .limit(1);
   if (!rows.length) return null;
   if (new Date(rows[0].expiresAt) < new Date()) return null;
-  const safe = { ...rows[0].user };
-  delete safe.passwordHash;
+  const { passwordHash: _passwordHash, ...safe } = rows[0].user;
   return safe;
 }
 
