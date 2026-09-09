@@ -1,28 +1,26 @@
-import Database from "better-sqlite3";
-import {
-  drizzle,
-  type BetterSQLite3Database,
-} from "drizzle-orm/better-sqlite3";
+import { createClient, type Client } from "@libsql/client";
+import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql";
 import * as schema from "./schema";
-import path from "path";
 
-const dbPath =
-  process.env.DATABASE_URL?.replace("file:", "") ??
-  path.join(process.cwd(), "blog.db");
+const dbUrl =
+  process.env.TURSO_DATABASE_URL ??
+  process.env.DATABASE_URL ??
+  "file:./blog.db";
+const authToken = process.env.TURSO_AUTH_TOKEN ?? undefined;
 
 declare global {
-  var __sqlite: Database.Database | undefined;
-  var __db: BetterSQLite3Database<typeof schema> | undefined;
+  var __turso: Client | undefined;
+  var __db: LibSQLDatabase<typeof schema> | undefined;
 }
 
 function getClient() {
-  if (!globalThis.__sqlite) {
-    const client = new Database(dbPath);
-    client.pragma("journal_mode = WAL");
-    client.pragma("foreign_keys = ON");
-    globalThis.__sqlite = client;
+  if (!globalThis.__turso) {
+    globalThis.__turso = createClient({
+      url: dbUrl,
+      authToken,
+    });
   }
-  return globalThis.__sqlite;
+  return globalThis.__turso;
 }
 
 export function getDb() {
@@ -33,9 +31,9 @@ export function getDb() {
 }
 
 export function initDb() {
-  const sqlite = getClient();
-  sqlite.exec(`
-    CREATE TABLE IF NOT EXISTS users (
+  const client = getClient();
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
@@ -43,20 +41,20 @@ export function initDb() {
       role TEXT NOT NULL DEFAULT 'admin',
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS categories (
+    )`,
+    `CREATE TABLE IF NOT EXISTS categories (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       slug TEXT NOT NULL UNIQUE,
       description TEXT,
       created_at TEXT NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS tags (
+    )`,
+    `CREATE TABLE IF NOT EXISTS tags (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       slug TEXT NOT NULL UNIQUE
-    );
-    CREATE TABLE IF NOT EXISTS posts (
+    )`,
+    `CREATE TABLE IF NOT EXISTS posts (
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,
       slug TEXT NOT NULL UNIQUE,
@@ -71,21 +69,26 @@ export function initDb() {
       published_at TEXT,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS post_tags (
+    )`,
+    `CREATE TABLE IF NOT EXISTS post_tags (
       post_id TEXT NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
       tag_id TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
       PRIMARY KEY (post_id, tag_id)
-    );
-    CREATE TABLE IF NOT EXISTS sessions (
+    )`,
+    `CREATE TABLE IF NOT EXISTS sessions (
       token TEXT PRIMARY KEY,
       user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       expires_at TEXT NOT NULL,
       created_at TEXT NOT NULL
-    );
-    CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
-    CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
-    CREATE INDEX IF NOT EXISTS idx_posts_published ON posts(published_at);
-  `);
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug)`,
+    `CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status)`,
+    `CREATE INDEX IF NOT EXISTS idx_posts_published ON posts(published_at)`,
+  ];
+
+  for (const statement of statements) {
+    client.execute(statement).catch(() => {});
+  }
+
   return getDb();
 }
