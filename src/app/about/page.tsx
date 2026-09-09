@@ -1,34 +1,46 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "About", description: "About Marginalia — a one-person publication on software, design, and attention." };
+export const metadata: Metadata = {
+  title: "Tentang",
+  description:
+    "Tentang Marginalia — publikasi satu orang tentang perangkat lunak, desain, dan perhatian.",
+};
 
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[760px] px-5 py-14 md:py-20">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">About</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+        Tentang
+      </p>
       <h1 className="mt-4 font-serif text-5xl leading-[1.05] tracking-tight md:text-6xl">
-        A publication for people who care about how ideas are presented.
+        Publikasi bagi mereka yang peduli bagaimana ide disajikan.
       </h1>
       <div className="prose-editorial mt-8">
         <p>
-          Marginalia is a one-person publication about software, design, and attention. Essays when there&apos;s something
-          worth saying, technical notes from real work, and short observations that don&apos;t fit anywhere else.
+          Marginalia adalah publikasi satu orang tentang perangkat lunak,
+          desain, dan perhatian. Esai ketika ada sesuatu yang layak dikatakan,
+          catatan teknis dari pekerjaan nyata, serta observasi singkat yang
+          tidak cocok di tempat lain.
         </p>
-        <h2>What you&apos;ll find here</h2>
+        <h2>Apa yang akan Anda temukan di sini</h2>
         <p>
-          Long-form essays on building software, notes on typography and interfaces, and field reports from shipping
-          small things with boring technology. Everything is edited, nothing is optimized for an algorithm.
+          Esai panjang tentang membangun perangkat lunak, catatan tentang
+          tipografi dan antarmuka, serta laporan lapangan dari mengirimkan
+          hal-hal kecil dengan teknologi yang sederhana. Segalanya diedit, dan
+          tidak ada yang dioptimalkan untuk algoritma.
         </p>
-        <h2>How it&apos;s made</h2>
+        <h2>Bagaimana cara pembuatannya</h2>
         <p>
-          This site is a single Next.js app backed by SQLite, styled with warm neutrals and one serif. Articles are
-          written in Markdown, rendered on the server, and shipped with almost no JavaScript. No trackers, no popups,
-          no newsletter walls.
+          Situs ini adalah satu aplikasi Next.js dengan SQLite di belakangnya,
+          dibangun dengan nuansa hangat dan satu serif. Artikel ditulis dalam
+          Markdown, dirender di server, dan dikirim dengan hampir tanpa
+          JavaScript. Tanpa pelacak, tanpa pop-up, tanpa tembok buletin.
         </p>
-        <h2>Contact</h2>
+        <h2>Kontak</h2>
         <p>
-          The best way to respond to an essay is to write your own and send the link. For anything else, reach the
-          author through the admin account on this instance.
+          Cara terbaik untuk menanggapi sebuah esai adalah menulis versi Anda
+          sendiri dan mengirimkan tautannya. Untuk hal lain, hubungi penulis
+          melalui akun admin di instance ini.
         </p>
       </div>
     </div>

@@ -22,7 +22,7 @@ export async function createSession(userId: string) {
   const db = getDb();
   const token = crypto.randomBytes(32).toString("hex");
   const expiresAt = new Date(
-    Date.now() + TTL_DAYS * 24 * 3600 * 1000
+    Date.now() + TTL_DAYS * 24 * 3600 * 1000,
   ).toISOString();
   await db.insert(sessions).values({
     token,
@@ -60,7 +60,10 @@ export async function getSessionUser() {
   if (!token) return null;
   const db = getDb();
   // cleanup expired opportunistically
-  await db.delete(sessions).where(lt(sessions.expiresAt, new Date().toISOString())).catch(() => {});
+  await db
+    .delete(sessions)
+    .where(lt(sessions.expiresAt, new Date().toISOString()))
+    .catch(() => {});
   const rows = await db
     .select({ user: users, expiresAt: sessions.expiresAt })
     .from(sessions)
@@ -69,7 +72,8 @@ export async function getSessionUser() {
     .limit(1);
   if (!rows.length) return null;
   if (new Date(rows[0].expiresAt) < new Date()) return null;
-  const { passwordHash: _omit, ...safe } = rows[0].user;
+  const safe = { ...rows[0].user };
+  delete safe.passwordHash;
   return safe;
 }
 

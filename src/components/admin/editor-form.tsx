@@ -46,12 +46,23 @@ export function EditorForm({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!slugTouched) setSlug(slugifyTitle(title));
   }, [title, slugTouched]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDirty(true);
-  }, [title, slug, excerpt, content, categoryId, tags, seoTitle, seoDescription]);
+  }, [
+    title,
+    slug,
+    excerpt,
+    content,
+    categoryId,
+    tags,
+    seoTitle,
+    seoDescription,
+  ]);
 
   // Unsaved-changes warning
   useEffect(() => {
@@ -75,9 +86,20 @@ export function EditorForm({
         router.refresh();
       }
     }, 2500);
-    return () => { if (timer.current) clearTimeout(timer.current); };
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, slug, excerpt, content, categoryId, tags, seoTitle, seoDescription]);
+  }, [
+    title,
+    slug,
+    excerpt,
+    content,
+    categoryId,
+    tags,
+    seoTitle,
+    seoDescription,
+  ]);
 
   function buildFormData(status: "draft" | "published") {
     const fd = new FormData();
@@ -113,46 +135,89 @@ export function EditorForm({
     });
   }
 
-  const words = useMemo(() => content.trim().split(/\s+/).filter(Boolean).length, [content]);
+  const words = useMemo(
+    () => content.trim().split(/\s+/).filter(Boolean).length,
+    [content],
+  );
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 text-sm text-muted">
-          <span>{words} words · ~{Math.max(1, Math.round(words / 200))} min</span>
-          {savedAt && <span aria-live="polite">Autosaved {savedAt}</span>}
-          {dirty && <span className="text-accent">· Unsaved changes</span>}
+          <span>
+            {words} kata · ~{Math.max(1, Math.round(words / 200))} menit
+          </span>
+          {savedAt && <span aria-live="polite">Tersimpan {savedAt}</span>}
+          {dirty && (
+            <span className="text-accent">· Perubahan belum disimpan</span>
+          )}
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" disabled={pending} onClick={() => submit("draft")}>
-            {pending ? "Saving..." : "Save draft"}
+          <Button
+            variant="outline"
+            disabled={pending}
+            onClick={() => submit("draft")}
+          >
+            {pending ? "Menyimpan..." : "Simpan draf"}
           </Button>
           {initial.id && initial.status === "published" && (
-            <a href={`/blog/${slug}`} target="_blank" className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm hover:bg-surface">
-              Preview
+            <a
+              href={`/blog/${slug}`}
+              target="_blank"
+              className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm hover:bg-surface"
+            >
+              Pratinjau
             </a>
           )}
-          <Button variant="accent" disabled={pending} onClick={() => submit("published")}>
-            {pending ? "Publishing..." : "Publish"}
+          <Button
+            variant="accent"
+            disabled={pending}
+            onClick={() => submit("published")}
+          >
+            {pending ? "Menerbitkan..." : "Terbitkan"}
           </Button>
         </div>
       </div>
 
-      {error && <p role="alert" className="mt-4 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 text-sm">{error}</p>}
+      {error && (
+        <p
+          role="alert"
+          className="mt-4 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 text-sm"
+        >
+          {error}
+        </p>
+      )}
 
       <div className="mt-6 space-y-1.5">
-        <Label htmlFor="title">Title ({title.length}/160)</Label>
-        <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="A clear, specific headline" maxLength={160} />
+        <Label htmlFor="title">Judul ({title.length}/160)</Label>
+        <Input
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Judul yang jelas dan spesifik"
+          maxLength={160}
+        />
       </div>
 
       <div className="mt-4 space-y-1.5">
-        <Label htmlFor="excerpt">Excerpt ({excerpt.length}/300)</Label>
-        <Textarea id="excerpt" value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} maxLength={300} placeholder="One or two sentences on the value of this piece." />
+        <Label htmlFor="excerpt">Ringkasan ({excerpt.length}/300)</Label>
+        <Textarea
+          id="excerpt"
+          value={excerpt}
+          onChange={(e) => setExcerpt(e.target.value)}
+          rows={2}
+          maxLength={300}
+          placeholder="Satu atau dua kalimat tentang nilai tulisan ini."
+        />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_300px]">
         <div>
-          <div className="flex gap-1 border-b border-border" role="tablist" aria-label="Editor">
+          <div
+            className="flex gap-1 border-b border-border"
+            role="tablist"
+            aria-label="Editor"
+          >
             {(["write", "preview"] as const).map((t) => (
               <button
                 key={t}
@@ -161,55 +226,96 @@ export function EditorForm({
                 onClick={() => setTab(t)}
                 className={`px-4 py-2 text-sm capitalize ${tab === t ? "border-b-2 border-accent font-medium" : "text-muted hover:text-foreground"}`}
               >
-                {t}
+                {t === "write" ? "Tulis" : "Pratinjau"}
               </button>
             ))}
           </div>
           {tab === "write" ? (
             <Textarea
-              aria-label="Article content (Markdown)"
+              aria-label="Konten artikel (Markdown)"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={24}
-              placeholder={"Write in Markdown...\n\n## A section\n\nSome prose with **emphasis**.\n\n```ts\nconst x = 1;\n```\n\n> A pull quote."}
+              placeholder={
+                "Tulis dalam Markdown...\n\n## Judul bagian\n\nBeberapa paragraf dengan **penekanan**.\n\n```ts\nconst x = 1;\n```\n\n> Kutipan."
+              }
               className="mt-4 font-mono text-[13.5px] leading-relaxed"
             />
           ) : (
             <div className="prose-editorial mt-4 rounded-md border border-border p-6 text-[1rem]">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{content || "*Nothing to preview yet.*"}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {content || "*Belum ada pratinjau.*"}
+              </ReactMarkdown>
             </div>
           )}
         </div>
 
-        <aside className="h-fit space-y-5 rounded-md border border-border p-5 lg:sticky lg:top-6" aria-label="Post settings">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted">Post settings</p>
+        <aside
+          className="h-fit space-y-5 rounded-md border border-border p-5 lg:sticky lg:top-6"
+          aria-label="Pengaturan artikel"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted">
+            Pengaturan artikel
+          </p>
           <div className="space-y-1.5">
             <Label htmlFor="slug">Slug</Label>
-            <Input id="slug" value={slug} onChange={(e) => { setSlug(e.target.value); setSlugTouched(true); }} placeholder="clean-readable-slug" />
+            <Input
+              id="slug"
+              value={slug}
+              onChange={(e) => {
+                setSlug(e.target.value);
+                setSlugTouched(true);
+              }}
+              placeholder="slug-bacaan-tersusun"
+            />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="category">Category</Label>
+            <Label htmlFor="category">Kategori</Label>
             <select
               id="category"
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm focus:border-accent focus:outline-none"
             >
-              <option value="">Uncategorized</option>
-              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              <option value="">Tanpa kategori</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="tags">Tags (comma-separated)</Label>
-            <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="Next.js, Craft" />
+            <Label htmlFor="tags">Tag (dipisahkan koma)</Label>
+            <Input
+              id="tags"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="Next.js, Keterampilan"
+            />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="seoTitle">SEO title ({seoTitle.length}/70)</Label>
-            <Input id="seoTitle" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} maxLength={70} placeholder="Defaults to title" />
+            <Label htmlFor="seoTitle">Judul SEO ({seoTitle.length}/70)</Label>
+            <Input
+              id="seoTitle"
+              value={seoTitle}
+              onChange={(e) => setSeoTitle(e.target.value)}
+              maxLength={70}
+              placeholder="Default ke judul"
+            />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="seoDescription">SEO description ({seoDescription.length}/160)</Label>
-            <Textarea id="seoDescription" value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} rows={3} maxLength={160} placeholder="Defaults to excerpt" />
+            <Label htmlFor="seoDescription">
+              Deskripsi SEO ({seoDescription.length}/160)
+            </Label>
+            <Textarea
+              id="seoDescription"
+              value={seoDescription}
+              onChange={(e) => setSeoDescription(e.target.value)}
+              rows={3}
+              maxLength={160}
+              placeholder="Default ke ringkasan"
+            />
           </div>
         </aside>
       </div>

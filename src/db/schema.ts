@@ -1,5 +1,4 @@
-import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core";
-import { sql } from "drizzle-orm";
+import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
 
 function ts(name: string) {
   return text(name)
@@ -62,7 +61,7 @@ export const postTags = sqliteTable(
       .notNull()
       .references(() => tags.id, { onDelete: "cascade" }),
   },
-  (t) => [primaryKey({ columns: [t.postId, t.tagId] })]
+  (t) => [primaryKey({ columns: [t.postId, t.tagId] })],
 );
 
 export const sessions = sqliteTable("sessions", {

@@ -1,5 +1,8 @@
 import Database from "better-sqlite3";
-import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import {
+  drizzle,
+  type BetterSQLite3Database,
+} from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema";
 import path from "path";
 
@@ -8,9 +11,7 @@ const dbPath =
   path.join(process.cwd(), "blog.db");
 
 declare global {
-  // eslint-disable-next-line no-var
   var __sqlite: Database.Database | undefined;
-  // eslint-disable-next-line no-var
   var __db: BetterSQLite3Database<typeof schema> | undefined;
 }
 

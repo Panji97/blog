@@ -8,7 +8,11 @@ import { EditorForm } from "@/components/admin/editor-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   initDb();
   const db = getDb();
@@ -23,9 +27,13 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
 
   return (
     <div>
-      <Link href="/admin/posts" className="link-underline text-sm">← Posts</Link>
-      <h2 className="mt-2 font-serif text-3xl tracking-tight">Edit post</h2>
-      <p className="mt-1 text-sm text-muted">Drafts autosave as you type.</p>
+      <Link href="/admin/posts" className="link-underline text-sm">
+        ← Artikel
+      </Link>
+      <h2 className="mt-2 font-serif text-3xl tracking-tight">Edit artikel</h2>
+      <p className="mt-1 text-sm text-muted">
+        Draf tersimpan otomatis saat Anda mengetik.
+      </p>
       <div className="mt-6">
         <EditorForm
           categories={cats}

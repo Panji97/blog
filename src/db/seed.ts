@@ -5,25 +5,49 @@ import { uid } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 
 const CATS = [
-  { name: "Technology", slug: "technology", description: "Software, systems, and building things for the web." },
-  { name: "Design", slug: "design", description: "Typography, layout, and the quiet details of interfaces." },
-  { name: "Ideas", slug: "ideas", description: "Essays and observations worth thinking about." },
-  { name: "Notes", slug: "notes", description: "Short technical notes from the work behind the scenes." },
+  {
+    name: "Technology",
+    slug: "technology",
+    description: "Software, systems, and building things for the web.",
+  },
+  {
+    name: "Design",
+    slug: "design",
+    description: "Typography, layout, and the quiet details of interfaces.",
+  },
+  {
+    name: "Ideas",
+    slug: "ideas",
+    description: "Essays and observations worth thinking about.",
+  },
+  {
+    name: "Notes",
+    slug: "notes",
+    description: "Short technical notes from the work behind the scenes.",
+  },
 ];
 
 const TAGS = ["Next.js", "SQLite", "Typography", "Systems", "Writing", "Craft"];
 
 type SeedPost = {
-  title: string; slug: string; excerpt: string; category: string;
-  tags: string[]; daysAgo: number; content: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  category: string;
+  tags: string[];
+  daysAgo: number;
+  content: string;
 };
 
 const POSTS: SeedPost[] = [
   {
     title: "Why boring technology wins",
     slug: "why-boring-technology-wins",
-    excerpt: "SQLite, server-rendered HTML, and a single deployable. On choosing tools that disappear.",
-    category: "technology", tags: ["Systems", "SQLite"], daysAgo: 1,
+    excerpt:
+      "SQLite, server-rendered HTML, and a single deployable. On choosing tools that disappear.",
+    category: "technology",
+    tags: ["Systems", "SQLite"],
+    daysAgo: 1,
     content: `Most teams don't have a technology problem. They have a complexity problem.
 
 Every dependency is a promise you have to keep. Every service is a thing that can fail at 2am. So lately I've been reaching for the boring option on purpose.
@@ -57,8 +81,11 @@ Until then, boring wins because it leaves all your energy for the part users act
   {
     title: "Editorial design for developer blogs",
     slug: "editorial-design-developer-blogs",
-    excerpt: "Whitespaces, serif headlines, and thin borders. How to look bespoke without gimmicks.",
-    category: "design", tags: ["Typography", "Craft"], daysAgo: 3,
+    excerpt:
+      "Whitespaces, serif headlines, and thin borders. How to look bespoke without gimmicks.",
+    category: "design",
+    tags: ["Typography", "Craft"],
+    daysAgo: 3,
     content: `Developer blogs all look the same because they use the same defaults: gradient hero, three glass cards, twelve accent colors.
 
 An editorial approach does the opposite. It removes.
@@ -79,8 +106,11 @@ Good design here is quiet. If the animation is noticeable before the content, it
   {
     title: "Markdown as a content API",
     slug: "markdown-as-content-api",
-    excerpt: "Why storing Markdown in SQLite beats JSON blobs and rich-text payloads.",
-    category: "technology", tags: ["Next.js", "SQLite"], daysAgo: 5,
+    excerpt:
+      "Why storing Markdown in SQLite beats JSON blobs and rich-text payloads.",
+    category: "technology",
+    tags: ["Next.js", "SQLite"],
+    daysAgo: 5,
     content: `Store Markdown. Render HTML at the edge. Everything else is overhead.
 
 ## Why it works
@@ -102,8 +132,11 @@ The result is fast — Server Components ship almost zero JS for the article bod
   {
     title: "The quiet craft of reading time",
     slug: "quiet-craft-reading-time",
-    excerpt: "Small metadata — author, date, minutes — is UX. Treat it like product copy.",
-    category: "ideas", tags: ["Writing", "Craft"], daysAgo: 7,
+    excerpt:
+      "Small metadata — author, date, minutes — is UX. Treat it like product copy.",
+    category: "ideas",
+    tags: ["Writing", "Craft"],
+    daysAgo: 7,
     content: `Nobody clicks because of "6 min read". But everybody uses it to decide.
 
 Metadata is a promise about cost. "Elena · Sep 04 · 6 min" tells me who, how fresh, and how much attention this asks for. That's respect.
@@ -119,8 +152,11 @@ Small things compound. A publication that respects attention earns return visits
   {
     title: "SQLite in production: what they don't tell you",
     slug: "sqlite-in-production",
-    excerpt: "WAL mode, single-file backups, and when to actually leave SQLite.",
-    category: "technology", tags: ["SQLite", "Systems"], daysAgo: 9,
+    excerpt:
+      "WAL mode, single-file backups, and when to actually leave SQLite.",
+    category: "technology",
+    tags: ["SQLite", "Systems"],
+    daysAgo: 9,
     content: `SQLite handles far more than people expect — thousands of reads per second on a single file.
 
 ## The setup that works
@@ -141,8 +177,11 @@ For a blog, documentation site, or internal tool, you may never leave. That's fi
   {
     title: "Typography is the interface",
     slug: "typography-is-interface",
-    excerpt: "Body at 18px, line-height 1.75, measure at 68 characters. The rest is detail.",
-    category: "design", tags: ["Typography"], daysAgo: 12,
+    excerpt:
+      "Body at 18px, line-height 1.75, measure at 68 characters. The rest is detail.",
+    category: "design",
+    tags: ["Typography"],
+    daysAgo: 12,
     content: `If you get typography right, you barely need anything else.
 
 ## My defaults
@@ -158,8 +197,11 @@ Test with a long article, a code block, and a blockquote. If those three look ca
   {
     title: "Notes on shipping a personal publication",
     slug: "notes-shipping-publication",
-    excerpt: "Eight posts, four categories, one voice. What I learned launching this blog.",
-    category: "notes", tags: ["Writing"], daysAgo: 15,
+    excerpt:
+      "Eight posts, four categories, one voice. What I learned launching this blog.",
+    category: "notes",
+    tags: ["Writing"],
+    daysAgo: 15,
     content: `I launched with eight real posts instead of lorem ipsum. That one decision made every design flaw visible — which is exactly what you want.
 
 Placeholder text hides bad hierarchy. Real headlines expose it.
@@ -176,8 +218,11 @@ Ship the words first. The design will follow.`,
   {
     title: "Server Components by default",
     slug: "server-components-by-default",
-    excerpt: "Public pages should ship almost no JavaScript. Here's where client code earns its place.",
-    category: "technology", tags: ["Next.js", "Systems"], daysAgo: 18,
+    excerpt:
+      "Public pages should ship almost no JavaScript. Here's where client code earns its place.",
+    category: "technology",
+    tags: ["Next.js", "Systems"],
+    daysAgo: 18,
     content: `The fastest JavaScript is the JavaScript you don't ship.
 
 On this blog, the homepage, article page, category page, and search results are Server Components. Client components exist only for: theme toggle, search input, share buttons, and the admin editor.
@@ -191,8 +236,11 @@ Your Lighthouse score will thank you. So will readers on slow phones.`,
   {
     title: "Against the SaaS hero",
     slug: "against-saas-hero",
-    excerpt: "No 'Get Started' button on a blog. What an editorial hero does instead.",
-    category: "ideas", tags: ["Craft", "Writing"], daysAgo: 22,
+    excerpt:
+      "No 'Get Started' button on a blog. What an editorial hero does instead.",
+    category: "ideas",
+    tags: ["Craft", "Writing"],
+    daysAgo: 22,
     content: `A blog is not a funnel. It doesn't need a gradient headline and two CTAs.
 
 An editorial hero does three things:
@@ -206,8 +254,11 @@ An editorial hero does three things:
   {
     title: "A field guide to good excerpts",
     slug: "field-guide-good-excerpts",
-    excerpt: "One or two sentences. Say what the reader gets, not how you feel about it.",
-    category: "notes", tags: ["Writing", "Typography"], daysAgo: 28,
+    excerpt:
+      "One or two sentences. Say what the reader gets, not how you feel about it.",
+    category: "notes",
+    tags: ["Writing", "Typography"],
+    daysAgo: 28,
     content: `Bad excerpt: "In this post I'll be talking about some thoughts on design."
 
 Good excerpt: "Thin borders, warm neutrals, and one serif — a system for blogs that look bespoke."
@@ -225,7 +276,7 @@ export async function seed() {
   const db = getDb();
   const now = new Date().toISOString();
 
-  let admin = await db.select().from(users).limit(1);
+  const admin = await db.select().from(users).limit(1);
   let adminId: string;
   if (!admin.length) {
     adminId = uid("u_");
@@ -245,7 +296,11 @@ export async function seed() {
 
   const catIds: Record<string, string> = {};
   for (const c of CATS) {
-    const existing = await db.select().from(categories).where(eq(categories.slug, c.slug)).limit(1);
+    const existing = await db
+      .select()
+      .from(categories)
+      .where(eq(categories.slug, c.slug))
+      .limit(1);
     if (!existing.length) {
       const id = uid("c_");
       await db.insert(categories).values({ id, ...c, createdAt: now });
@@ -256,7 +311,11 @@ export async function seed() {
   const tagIds: Record<string, string> = {};
   for (const t of TAGS) {
     const slug = t.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const existing = await db.select().from(tags).where(eq(tags.slug, slug)).limit(1);
+    const existing = await db
+      .select()
+      .from(tags)
+      .where(eq(tags.slug, slug))
+      .limit(1);
     if (!existing.length) {
       const id = uid("t_");
       await db.insert(tags).values({ id, name: t, slug });
@@ -265,10 +324,16 @@ export async function seed() {
   }
 
   for (const p of POSTS) {
-    const existing = await db.select().from(posts).where(eq(posts.slug, p.slug)).limit(1);
+    const existing = await db
+      .select()
+      .from(posts)
+      .where(eq(posts.slug, p.slug))
+      .limit(1);
     if (existing.length) continue;
     const id = uid("p_");
-    const publishedAt = new Date(Date.now() - p.daysAgo * 86400000).toISOString();
+    const publishedAt = new Date(
+      Date.now() - p.daysAgo * 86400000,
+    ).toISOString();
     await db.insert(posts).values({
       id,
       title: p.title,
@@ -286,7 +351,11 @@ export async function seed() {
       updatedAt: publishedAt,
     });
     for (const t of p.tags) {
-      if (tagIds[t]) await db.insert(postTags).values({ postId: id, tagId: tagIds[t] }).onConflictDoNothing();
+      if (tagIds[t])
+        await db
+          .insert(postTags)
+          .values({ postId: id, tagId: tagIds[t] })
+          .onConflictDoNothing();
     }
   }
   console.log("Seed complete.");
